@@ -1,0 +1,36 @@
+services:
+  mysql:
+    image: mysql:8.0.33
+    container_name: mysql-db
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql:ro
+
+  flask-api:
+    build:
+      context: ./flask-api
+      dockerfile: Dockerfile
+    container_name: flask-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_DOCKER_PORT=${MYSQL_DOCKER_PORT}
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
