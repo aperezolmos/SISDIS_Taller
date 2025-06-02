@@ -2,7 +2,8 @@
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'standard'
 );
 
 -- Crear tabla de Pokémons
@@ -22,9 +23,6 @@ CREATE TABLE IF NOT EXISTS favorite_pokemons (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (pokemon_id) REFERENCES pokemons(id) ON DELETE CASCADE
 );
-
--- Insertar datos iniciales en la tabla de Usuarios
-INSERT INTO users (username, password) VALUES ('amanda', 'perez123');
 
 -- Insertar datos iniciales en la tabla de Pokémons
 INSERT INTO pokemons (name, external_id, image_url) VALUES ('Pikachu', 25, 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png');

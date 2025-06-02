@@ -20,11 +20,15 @@
             <!-- Dropdown -->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLinkRight" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span th:text="${username}" style="font-size: 1.1rem; margin-right: 11px;"></span>
+                    <span th:text="${#authentication.name}" style="font-size: 1.1rem; margin-right: 11px;"></span>
                     <img src="/images/default_pfp.jpg" alt="Usuario" class="rounded-circle" style="width: 33px; height: 33px;">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLinkRight">
-                    <li><a class="dropdown-item" th:href="@{/home}">Cerrar Sesión</a></li>
+                    <li>
+                        <form th:action="@{/logout}" method="post" style="margin: 0;">
+                            <button type="submit" class="dropdown-item">Cerrar Sesión</button>
+                        </form>
+                    </li>
                 </ul>
             </li>
         </ul>
@@ -32,7 +36,7 @@
 </nav>
 
 <div class="container vh-100 d-flex flex-column justify-content-center">
-    <h1 class="text-center mb-4">Saludos, <span th:text="${username}"></span>!</h1>
+    <h1 class="text-center mb-4">Saludos, <span th:text="${#authentication.name}"></span>!</h1>
     <div class="d-flex justify-content-center">
         <a th:href="@{/simulate}" class="btn btn-secondary btn-lg mx-2">Simular Errores</a>
         <a th:href="@{/list}" class="btn btn-primary btn-lg mx-2">Llamadas PokeAPI</a>

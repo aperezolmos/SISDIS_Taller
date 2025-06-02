@@ -51,11 +51,19 @@
           </div>
 
           <!-- Error message -->
-          <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+          <div th:if="${param.error}" class="alert alert-danger" role="alert">Usuario o contraseña incorrectos</div>
+
+          <div th:if="${param.registered}" class="alert alert-success" role="alert">
+              Usuario registrado correctamente. Ahora puedes iniciar sesión.
+          </div>
 
           <div class="text-center text-lg-start mt-4 pt-2">
             <button type="submit" class="btn btn-primary btn-lg"
               style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+          </div>
+          <div class="text-center mt-3">
+              <span>¿No tienes cuenta?</span>
+              <a th:href="@{/signup}" class="btn btn-link">Regístrate</a>
           </div>
         </form>
       </div>
