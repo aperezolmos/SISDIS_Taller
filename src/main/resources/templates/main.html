@@ -27,6 +27,9 @@
                     <li>
                         <a class="dropdown-item" th:href="@{/user/edit}">Editar perfil</a>
                     </li>
+                    <li th:if="${#authorization.expression('hasRole(''admin'')')}">
+                        <a class="dropdown-item" th:href="@{/user/management}">Gestionar usuarios</a>
+                    </li>
                     <li>
                         <form th:action="@{/logout}" method="post" style="margin: 0;">
                             <button type="submit" class="dropdown-item">Cerrar Sesión</button>
