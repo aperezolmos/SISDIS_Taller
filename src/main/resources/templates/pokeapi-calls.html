@@ -25,6 +25,9 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLinkRight">
                     <li>
+                        <a class="dropdown-item" th:href="@{/user/edit}">Editar perfil</a>
+                    </li>
+                    <li>
                         <form th:action="@{/logout}" method="post" style="margin: 0;">
                             <button type="submit" class="dropdown-item">Cerrar Sesión</button>
                         </form>

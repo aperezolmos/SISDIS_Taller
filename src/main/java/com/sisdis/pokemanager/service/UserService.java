@@ -38,6 +38,15 @@ public class UserService {
                 .toList();
     }
 
+    public boolean existsByUsername(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    public User findUserEntityByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    }
+
     public UserDTO registerUser(User user) {
         // TODO: Verifica si el usuario ya existe
         

@@ -29,9 +29,7 @@ public class PokeListController {
             List<Map<String, String>> pokemons = flaskService.listPokemons(limit, offset);
             model.addAttribute("pokemons", pokemons);
             model.addAttribute("limit", limit);
-
-            String username = (String) session.getAttribute("currentUser");
-            model.addAttribute("username", username);
+            
         } catch (Exception e) {
             model.addAttribute("error", "Error al obtener la lista de Pokémon: " + e.getMessage());
         }

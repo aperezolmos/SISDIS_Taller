@@ -4,7 +4,6 @@ import com.sisdis.pokemanager.model.User;
 import com.sisdis.pokemanager.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +35,7 @@ public class SignUpController {
         try {
             userService.registerUser(user);
         } catch (Exception e) {
-            model.addAttribute("registrationError", "El usuario ya existe");
+            model.addAttribute("registrationError", "El usuario ya existe"); // TODO
             return "signup";
         }
         // Redirige a login para que el usuario inicie sesión

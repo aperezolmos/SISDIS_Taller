@@ -15,7 +15,7 @@ public class DataInitializer {
         
         String USUARIO = "amanda";
         String PASSWORD = "perez123";
-        String ROL = "standard";
+        String ROL = "admin";
         
         return args -> {
             if (userRepository.findByUsername(USUARIO).isEmpty()) {
