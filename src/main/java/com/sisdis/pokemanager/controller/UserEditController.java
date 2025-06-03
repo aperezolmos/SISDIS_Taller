@@ -38,11 +38,12 @@ public class UserEditController {
 
     @PostMapping
     public String processEdit(@ModelAttribute("user") @Valid User formUser,
-                              BindingResult result,
-                              @RequestParam("repeatPassword") String repeatPassword,
-                              @RequestParam(value = "editingUsername") String editingUsername,
-                              Authentication authentication,
-                              Model model) {
+                            BindingResult result,
+                            @RequestParam(value = "repeatPassword", required = false) String repeatPassword,
+                            @RequestParam(value = "editingUsername") String editingUsername,
+                            @RequestParam(value = "changePassword", required = false) String changePassword,
+                            Authentication authentication,
+                            Model model) {
         boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_admin"));
         User userToEdit = userService.findUserEntityByUsername(editingUsername);
 
@@ -55,18 +56,21 @@ public class UserEditController {
             return "user-edit";
         }
 
-        // Validar contraseñas
-        if (!formUser.getPassword().equals(repeatPassword)) {
-            model.addAttribute("passwordError", "Las contraseñas no coinciden");
-            model.addAttribute("editingUsername", editingUsername);
-            model.addAttribute("isAdmin", isAdmin);
-            return "user-edit";
+        // Si se quiere cambiar la contraseña, validar y actualizar
+        if ("on".equals(changePassword)) {
+            if (formUser.getPassword() == null || formUser.getPassword().isEmpty() ||
+                repeatPassword == null || repeatPassword.isEmpty() ||
+                !formUser.getPassword().equals(repeatPassword)) {
+                model.addAttribute("passwordError", "Las contraseñas no coinciden o están vacías");
+                model.addAttribute("editingUsername", editingUsername);
+                model.addAttribute("isAdmin", isAdmin);
+                return "user-edit";
+            }
+            userToEdit.setPassword(passwordEncoder.encode(formUser.getPassword()));
         }
 
-        // Actualizar usuario
+        // Actualizar username y rol (si es admin)
         userToEdit.setUsername(formUser.getUsername());
-        userToEdit.setPassword(passwordEncoder.encode(formUser.getPassword()));
-        // Solo admin puede cambiar el rol
         if (isAdmin) {
             userToEdit.setRole(formUser.getRole());
         }
