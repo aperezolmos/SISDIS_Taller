@@ -17,4 +17,13 @@ public class FlaskService {
         String url = flaskApiUrl + "/list-pokemon?limit=" + limit + "&offset=" + offset;
         return restTemplate.getForObject(url, List.class);
     }
+
+
+    public Map<String, Object> searchPokemons(String name, int limit, int offset) {
+    String url = flaskApiUrl + "/search-pokemon?limit=" + limit + "&offset=" + offset;
+    if (name != null && !name.isEmpty()) {
+        url += "&name=" + name;
+    }
+    return restTemplate.getForObject(url, Map.class);
+}
 }

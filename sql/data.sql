@@ -25,10 +25,5 @@ CREATE TABLE IF NOT EXISTS favorite_pokemons (
 );
 
 -- Insertar datos iniciales en la tabla de Pokémons
-INSERT INTO pokemons (name, external_id, image_url) VALUES ('Pikachu', 25, 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png');
-INSERT INTO pokemons (name, external_id, image_url) VALUES ('Charmander', 4, 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png');
-
--- Insertar la relación en la tabla de Pokémons favoritos
-SET @user_id = (SELECT id FROM users WHERE username = 'amanda');
-SET @pokemon_id = (SELECT id FROM pokemons WHERE name = 'Charmander');
-INSERT INTO favorite_pokemons (user_id, pokemon_id) VALUES (@user_id, @pokemon_id);
+INSERT INTO pokemons (name, external_id, image_url) VALUES ('pikachu', 25, 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png');
+INSERT INTO pokemons (name, external_id, image_url) VALUES ('charmander', 4, 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png');

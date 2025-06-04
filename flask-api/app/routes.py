@@ -55,6 +55,37 @@ def list_pokemon():
         return jsonify({"error": str(e)}), 500
 
 
+@bp.route('/search-pokemon', methods=['GET'])
+def search_pokemon():
+    name_query = request.args.get('name', '').lower()
+    limit = int(request.args.get('limit', 20))
+    offset = int(request.args.get('offset', 0))
+    try:
+        # Obtener todos los nombres de Pokémon (la pokeapi tiene 1300+)
+        all_pokemons = PokeAPI.list_pokemon(limit=1300, offset=0)
+        # Filtrar por nombre si hay búsqueda
+        if name_query:
+            filtered = [p for p in all_pokemons if name_query in p['name'].lower()]
+        else:
+            filtered = all_pokemons
+        # Paginación manual
+        paginated = filtered[offset:offset+limit]
+        # Añadir sprite a cada uno
+        for pokemon in paginated:
+            sprite_data = PokeAPI.get_pokemon_sprite(pokemon["name"])
+            pokemon["sprite"] = sprite_data["sprite"]
+
+            external_id_data = PokeAPI.get_pokemon_external_id(pokemon["name"])
+            pokemon["external_id"] = external_id_data["id"]
+        
+        return jsonify({
+            "results": paginated,
+            "total": len(filtered)
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 # ------------------------------ BASE DE DATOS ------------------------------
 
 @bp.route('/simulate/db-error', methods=['GET'])

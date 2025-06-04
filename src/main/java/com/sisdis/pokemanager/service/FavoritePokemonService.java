@@ -38,16 +38,15 @@ public class FavoritePokemonService {
         Pokemon pokemon = pokemonRepository.findById(pokemonId)
                 .orElseThrow(() -> new IllegalArgumentException("Pokemon not found with ID: " + pokemonId));
 
-        if (favoritePokemonRepository.existsByUserAndPokemon(user, pokemon)) {
-            throw new IllegalArgumentException("This Pokemon is already a favorite for the user.");
+        if (!favoritePokemonRepository.existsByUserAndPokemon(user, pokemon)) {
+            FavoritePokemon favoritePokemon = new FavoritePokemon();
+            favoritePokemon.setUser(user);
+            favoritePokemon.setPokemon(pokemon);
+
+            FavoritePokemon savedFavorite = favoritePokemonRepository.save(favoritePokemon);
+            return convertToDTO(savedFavorite);
         }
-
-        FavoritePokemon favoritePokemon = new FavoritePokemon();
-        favoritePokemon.setUser(user);
-        favoritePokemon.setPokemon(pokemon);
-
-        FavoritePokemon savedFavorite = favoritePokemonRepository.save(favoritePokemon);
-        return convertToDTO(savedFavorite);
+        return null;
     }
 
     public void removeFavoritePokemon(Long favoriteId) {
