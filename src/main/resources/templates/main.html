@@ -3,13 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal</title>
+    <title>Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .dashboard-container {
+            display: flex;
+            height: 90vh;
+            margin-top: 30px;
+        }
+        .left-panel {
+            width: 300px;
+            min-width: 250px;
+            background: #f8f9fa;
+            padding: 30px 20px;
+            border-radius: 15px;
+            margin-right: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .right-panel {
+            flex: 1;
+            background: #fff;
+            padding: 30px 30px 30px 30px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .favorites-list-container {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 60vh;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+            padding: 10px;
+        }
+        .favorite-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .favorite-row:last-child {
+            border-bottom: none;
+        }
+        .favorite-img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+        .daily-pokemon-placeholder {
+            width: 100%;
+            height: 120px;
+            background: #e3e3e3;
+            border-radius: 10px;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 1.2rem;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 2;
+            padding-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -41,13 +109,39 @@
     </div>
 </nav>
 
-<div class="container vh-100 d-flex flex-column justify-content-center">
-    <h1 class="text-center mb-4">Saludos, <span th:text="${#authentication.name}"></span>!</h1>
-    <div class="d-flex justify-content-center">
-        <a th:href="@{/simulate}" class="btn btn-secondary btn-lg mx-2">Simular Errores</a>
-        <a th:href="@{/list}" class="btn btn-primary btn-lg mx-2">Llamadas PokeAPI</a>
+<div class="container-fluid dashboard-container">
+    <!-- Panel izquierdo -->
+    <div class="left-panel">
+        <h3 class="mb-3">Saludos, <span th:text="${user.username}"></span>!</h3>
+        <img src="/images/default_pfp.jpg" alt="Usuario" class="rounded-circle mb-2" style="width: 90px; height: 90px;">
+        <div class="mb-2" style="font-weight: bold;" th:text="${user.username}"></div>
+        <div class="daily-pokemon-placeholder">
+            Pokémon diario<br>
+            <span style="font-size:0.9em;">(próximamente)</span>
+        </div>
+    </div>
 
-        <a th:href="@{/search-pokemon}" class="btn btn-success btn-lg mx-2">Buscar Pokémon</a>
+    <!-- Panel derecho -->
+    <div class="right-panel">
+        <div class="sticky-header d-flex justify-content-between align-items-center mb-2">
+            <h3 class="mb-0">Mis Pokémon favoritos</h3>
+            <a th:href="@{/search-pokemon}" class="btn btn-success">Buscar Pokémon</a>
+        </div>
+        <div class="favorites-list-container">
+            <div th:if="${#lists.isEmpty(favorites)}" class="text-center text-muted mt-4">
+                No tienes Pokémon favoritos aún.
+            </div>
+            <div th:each="fav : ${favorites}" class="favorite-row">
+                <div class="d-flex align-items-center">
+                    <img th:src="${fav.pokemon.imageUrl}" class="favorite-img" alt="sprite"/>
+                    <span th:text="${fav.pokemon.name}" style="font-size: 1.1em; font-weight: 500;"></span>
+                </div>
+                <form th:action="@{/remove-favorite}" method="post" onsubmit="return confirm('¿Eliminar de favoritos?');">
+                    <input type="hidden" name="favoriteId" th:value="${fav.id}"/>
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
