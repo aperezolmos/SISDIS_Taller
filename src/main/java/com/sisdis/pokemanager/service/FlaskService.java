@@ -20,10 +20,16 @@ public class FlaskService {
 
 
     public Map<String, Object> searchPokemons(String name, int limit, int offset) {
-    String url = flaskApiUrl + "/search-pokemon?limit=" + limit + "&offset=" + offset;
-    if (name != null && !name.isEmpty()) {
-        url += "&name=" + name;
+        String url = flaskApiUrl + "/search-pokemon?limit=" + limit + "&offset=" + offset;
+        if (name != null && !name.isEmpty()) {
+            url += "&name=" + name;
+        }
+        return restTemplate.getForObject(url, Map.class);
     }
-    return restTemplate.getForObject(url, Map.class);
-}
+
+
+    public Map<String, Object> getDailyPokemon(int pokemonId) {
+        String url = flaskApiUrl + "/pokemon-daily/" + pokemonId;
+        return restTemplate.getForObject(url, Map.class);
+    }
 }

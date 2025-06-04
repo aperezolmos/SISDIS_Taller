@@ -55,6 +55,8 @@ def list_pokemon():
         return jsonify({"error": str(e)}), 500
 
 
+
+
 @bp.route('/search-pokemon', methods=['GET'])
 def search_pokemon():
     name_query = request.args.get('name', '').lower()
@@ -85,6 +87,25 @@ def search_pokemon():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@bp.route('/pokemon-daily/<int:pokemon_id>', methods=['GET'])
+def get_pokemon_daily(pokemon_id):
+    try:
+        # Info básica
+        poke_data = PokeAPI.get_pokemon(pokemon_id)
+        name = poke_data["name"]
+        image = poke_data["sprites"]["other"]["official-artwork"]["front_default"] or poke_data["sprites"]["front_default"]
+        external_id = poke_data["id"]
+        # Flavor texts en español
+        flavor_texts = PokeAPI.get_pokemon_flavor_texts(pokemon_id)
+        return jsonify({
+            "id": external_id,
+            "name": name,
+            "image": image,
+            "flavor_texts": flavor_texts
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 404
+    
 
 # ------------------------------ BASE DE DATOS ------------------------------
 

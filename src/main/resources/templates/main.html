@@ -7,77 +7,6 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <style>
-        .dashboard-container {
-            display: flex;
-            height: 90vh;
-            margin-top: 30px;
-        }
-        .left-panel {
-            width: 300px;
-            min-width: 250px;
-            background: #f8f9fa;
-            padding: 30px 20px;
-            border-radius: 15px;
-            margin-right: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .right-panel {
-            flex: 1;
-            background: #fff;
-            padding: 30px 30px 30px 30px;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-        .favorites-list-container {
-            flex: 1;
-            overflow-y: auto;
-            max-height: 60vh;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            background: #f9f9f9;
-            padding: 10px;
-        }
-        .favorite-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .favorite-row:last-child {
-            border-bottom: none;
-        }
-        .favorite-img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            margin-right: 15px;
-        }
-        .daily-pokemon-placeholder {
-            width: 100%;
-            height: 120px;
-            background: #e3e3e3;
-            border-radius: 10px;
-            margin-top: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            font-size: 1.2rem;
-        }
-        .sticky-header {
-            position: sticky;
-            top: 0;
-            background: #fff;
-            z-index: 2;
-            padding-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -115,9 +44,33 @@
         <h3 class="mb-3">Saludos, <span th:text="${user.username}"></span>!</h3>
         <img src="/images/default_pfp.jpg" alt="Usuario" class="rounded-circle mb-2" style="width: 90px; height: 90px;">
         <div class="mb-2" style="font-weight: bold;" th:text="${user.username}"></div>
-        <div class="daily-pokemon-placeholder">
-            Pokémon diario<br>
-            <span style="font-size:0.9em;">(próximamente)</span>
+        <div class="daily-pokemon-box">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span style="font-weight:bold; font-size:1.1em;">Pokémon diario</span>
+                <span style="font-size:1.1em; font-weight:500;">ID: <span th:text="${dailyPokemon['id']}"></span></span>
+            </div>
+            <div class="d-flex justify-content-end mb-2">
+                <form th:action="@{/add-favorite-main}" method="post">
+                    <input type="hidden" name="pokemonName" th:value="${dailyPokemon['name']}"/>
+                    <input type="hidden" name="imageUrl" th:value="${dailyPokemon['image']}"/>
+                    <input type="hidden" name="externalId" th:value="${dailyPokemon['id']}"/>
+                    <button type="submit" class="btn btn-outline-success btn-sm">Añadir a favoritos</button>
+                </form>
+            </div>
+            <div class="text-center">
+                <img th:src="${dailyPokemon['image']}" alt="sprite" style="width:120px; margin:10px 0; display:block; margin-left:auto; margin-right:auto;"/>
+                <div style="font-size:1.2em; font-weight:600; text-align:center;" th:text="${#strings.capitalize(dailyPokemon['name'])}"></div>
+                <div style="margin-top:10px;">
+                    <span th:text="${dailyPokemon['flavor_texts'][0]}" id="flavorText"></span>
+                </div>
+                <div class="flavor-arrows mt-2">
+                    <button type="button" id="prevFlavor" class="btn btn-secondary btn-sm" style="display:none;">&#8592;</button>
+                    <button type="button" id="nextFlavor" class="btn btn-secondary btn-sm" style="display:none;">&#8594;</button>
+                </div>
+            </div>
+            <div th:if="${dailyPokemon == null}">
+                <span class="text-muted">No disponible</span>
+            </div>
         </div>
     </div>
 
@@ -147,5 +100,42 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener("DOMContentLoaded", function() {
+        /* Thymeleaf renderiza el array como JSON */
+        const flavorTexts = /*[[${dailyPokemon['flavor_texts']}]]*/ [];
+        let idx = 0;
+        const flavorTextSpan = document.getElementById("flavorText");
+        const prevBtn = document.getElementById("prevFlavor");
+        const nextBtn = document.getElementById("nextFlavor");
+
+        if (flavorTexts.length > 1) {
+            nextBtn.style.display = "inline-block";
+        }
+
+        function updateFlavor() {
+            flavorTextSpan.textContent = flavorTexts[idx];
+            prevBtn.style.display = idx > 0 ? "inline-block" : "none";
+            nextBtn.style.display = idx < flavorTexts.length - 1 ? "inline-block" : "none";
+        }
+
+        if (prevBtn && nextBtn && flavorTexts.length > 0) {
+            prevBtn.addEventListener("click", function() {
+                if (idx > 0) {
+                    idx--;
+                    updateFlavor();
+                }
+            });
+            nextBtn.addEventListener("click", function() {
+                if (idx < flavorTexts.length - 1) {
+                    idx++;
+                    updateFlavor();
+                }
+            });
+        }
+    });
+    /*]]>*/
+</script>
 </body>
 </html>

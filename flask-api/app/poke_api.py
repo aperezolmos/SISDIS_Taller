@@ -52,3 +52,20 @@ class PokeAPI:
             "name": data["name"],
             "id": data["id"]
         }
+    
+    @staticmethod
+    def get_pokemon_flavor_texts(pokemon_id):
+        url = f"{PokeAPI.BASE_URL}/pokemon-species/{pokemon_id}"
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        # Filtrar flavor texts en español y eliminar duplicados
+        texts = []
+        seen = set()
+        for entry in data["flavor_text_entries"]:
+            if entry["language"]["name"] == "es":
+                text = entry["flavor_text"].replace('\n', ' ').replace('\f', ' ').strip()
+                if text not in seen:
+                    texts.append(text)
+                    seen.add(text)
+        return texts
