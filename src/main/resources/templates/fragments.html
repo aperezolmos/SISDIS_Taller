@@ -1,15 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Font Awesome CDN -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
     <div th:fragment="navbar(breadcrumb)">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">PokeManager</a>
-                <span class="breadcrumb-item active ms-2" th:text="${breadcrumb}">Breadcrumb</span>
+                
+                <!-- Secciones de navegación -->
+                <div class="d-flex align-items-center ms-2">
+                    <!-- Main -->
+                    <a th:if="${breadcrumb != 'Main'}" th:href="@{/main}" class="navbar-section-link">Main</a>
+                    <span th:if="${breadcrumb == 'Main'}" class="navbar-section-current">Main</span>
+                    
+                    <span class="navbar-section-divider"
+                          th:if="${#authorization.expression('hasRole(''admin'')') or (breadcrumb != 'Main' and breadcrumb != 'Simular Errores')}">|</span>
+                    
+                    <!-- Simulate (solo admin) -->
+                    <a th:if="${#authorization.expression('hasRole(''admin'')') and breadcrumb != 'Simular Errores'}"
+                       th:href="@{/simulate}" class="navbar-section-link">Simular Errores</a>
+                    <span th:if="${#authorization.expression('hasRole(''admin'')') and breadcrumb == 'Simular Errores'}"
+                          class="navbar-section-current">Simular Errores</span>
+                    
+                    <span class="navbar-section-divider"
+                          th:if="${#authorization.expression('hasRole(''admin'')') and (breadcrumb != 'Main' and breadcrumb != 'Simular Errores')}">|</span>
+                    
+                    <!-- Página actual (si no es Main ni Simulate) -->
+                    <span th:if="${breadcrumb != 'Main' and breadcrumb != 'Simular Errores'}"
+                          class="navbar-section-current" th:text="${breadcrumb}">Actual</span>
+                </div>
+
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLinkRight" role="button" data-bs-toggle="dropdown" aria-expanded="false">

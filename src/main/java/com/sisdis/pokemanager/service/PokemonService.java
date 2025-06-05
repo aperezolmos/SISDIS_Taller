@@ -21,12 +21,6 @@ public class PokemonService {
                 .orElseThrow(() -> new RuntimeException("Pokemon not found with id: " + id));
     }
 
-    /*public List<PokemonDTO> findByName(String name) {
-        return pokemonRepository.findByNameContainingIgnoreCase(name).stream()
-                .map(this::convertToDTO)
-                .toList();
-    }*/ // TODO: ver qué hacer con esto
-
     public List<Pokemon> findByName(String name) {
         return pokemonRepository.findByNameContainingIgnoreCase(name);
     }

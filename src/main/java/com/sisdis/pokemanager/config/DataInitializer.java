@@ -35,8 +35,10 @@ public class DataInitializer {
                 user = userRepository.save(user);
             }
 
-            // Añadir todos los pokemons como favoritos de 'amanda'
+            // Añadir favoritos del usuario
+            int count = 0;
             for (Pokemon pokemon : pokemonRepository.findAll()) {
+                if (count >= 13) break;
                 boolean exists = favoritePokemonRepository.existsByUserAndPokemon(user, pokemon);
                 if (!exists) {
                     FavoritePokemon fav = new FavoritePokemon();
@@ -44,6 +46,7 @@ public class DataInitializer {
                     fav.setPokemon(pokemon);
                     favoritePokemonRepository.save(fav);
                 }
+                count++;
             }
         };
     }

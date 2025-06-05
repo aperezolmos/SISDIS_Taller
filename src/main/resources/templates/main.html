@@ -17,8 +17,8 @@
 <div class="container-fluid dashboard-container">
     <!-- Panel izquierdo -->
     <div class="left-panel">
-        <h3 class="mb-3">¡Saludos, <span th:text="${user.username}"></span>!</h3>
-        <img src="/images/default_pfp.jpg" alt="Usuario" class="rounded-circle mb-2" style="width: 90px; height: 90px;">
+        <h3 class="mb-3 text-center">¡Saludos, <span th:text="${user.username}"></span>!</h3>
+        <img src="/images/default_pfp.jpg" alt="Usuario" class="rounded-circle mb-2" style="width: 90px; height: 90px; margin-top: 10px;">
         <div class="mb-2" style="font-weight: bold;" th:text="${user.username}"></div>
         <div class="daily-pokemon-box">
             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -36,7 +36,7 @@
                 </form>
             </div>
             <div class="text-center">
-                <img th:src="${dailyPokemon['image']}" alt="sprite" style="width:120px; margin:5px 0; display:block; margin-left:auto; margin-right:auto;"/>
+                <img th:src="${dailyPokemon['image']}" alt="sprite" style="width:120px; margin:10px 0; display:block; margin-left:auto; margin-right:auto;"/>
                 <div style="font-size:1.2em; font-weight:600; text-align:center;" th:text="${#strings.capitalize(dailyPokemon['name'])}"></div>
                 <div style="margin-top:10px; font-size:0.9em;">
                     <span th:text="${dailyPokemon['flavor_texts'][0]}" id="flavorText"></span>

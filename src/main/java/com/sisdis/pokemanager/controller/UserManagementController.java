@@ -26,10 +26,9 @@ public class UserManagementController {
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam("id") Long id, Authentication authentication) {
-        // Opcional: evitar que un admin se borre a sí mismo //TODO: sí o no?
+        // Evitar que un admin se borre a sí mismo
         UserDTO userToDelete = userService.findById(id);
         if (userToDelete.getUsername().equals(authentication.getName())) {
-            // No permitir borrarse a sí mismo
             return "redirect:/user/management?error=cannot_delete_self";
         }
         userService.deleteById(id);

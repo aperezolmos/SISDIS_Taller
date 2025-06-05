@@ -23,12 +23,8 @@
               <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Editar usuario</p>
-                <p class="text-center mb-4" style="font-size: 1.1rem;">
-                    <span th:text="'Usuario a editar: ' + ${editingUsername}"></span>
-                </p>
 
                 <form class="mx-1 mx-md-4" th:action="@{/user/edit}" th:object="${user}" method="post">
-
                   <input type="hidden" name="editingUsername" th:value="${editingUsername}" />
 
                   <!-- Username -->
@@ -36,7 +32,6 @@
                       <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                       <div class="form-outline flex-fill mb-0">
                           <input type="text" th:field="*{username}" class="form-control" required/>
-                          <label class="form-label" for="username" th:text="'Nombre de usuario actual: ' + *{username}"></label>
                       </div>
                   </div>
                   <div th:if="${usernameError}" class="alert alert-danger" role="alert" th:text="${usernameError}"></div>
@@ -57,14 +52,12 @@
                           <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
                               <input type="password" th:field="*{password}" class="form-control" placeholder="Nueva contraseña" id="passwordInput"/>
-                              <label class="form-label" for="passwordInput">Nueva contraseña</label>
                           </div>
                       </div>
                       <div class="d-flex flex-row align-items-center mb-4">
                           <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                           <div class="form-outline flex-fill mb-0">
                               <input type="password" name="repeatPassword" class="form-control" placeholder="Repite la contraseña" id="repeatPasswordInput"/>
-                              <label class="form-label" for="repeatPasswordInput">Repite la contraseña</label>
                           </div>
                       </div>
                       <div th:if="${passwordError}" class="alert alert-danger" role="alert" th:text="${passwordError}"></div>
