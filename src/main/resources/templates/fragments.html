@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div th:fragment="navbar(breadcrumb)">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">PokeManager</a>
+                <span class="breadcrumb-item active ms-2" th:text="${breadcrumb}">Breadcrumb</span>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLinkRight" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span th:text="${#authentication.name}" style="font-size: 1.1rem; margin-right: 11px;"></span>
+                            <img src="/images/default_pfp.jpg" alt="Usuario" class="rounded-circle" style="width: 33px; height: 33px;">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLinkRight">
+                            <li>
+                                <a class="dropdown-item" th:href="@{/user/edit}">
+                                    <i class="fa-solid fa-user me-2"></i>Editar perfil
+                                </a>
+                            </li>
+                            <li th:if="${#authorization.expression('hasRole(''admin'')')}">
+                                <a class="dropdown-item" th:href="@{/user/management}">
+                                    <i class="fa-solid fa-user-shield me-2"></i>Gestionar usuarios
+                                </a>
+                            </li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="margin: 0;">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fa-solid fa-right-from-bracket me-2"></i>Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

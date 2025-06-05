@@ -12,34 +12,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">PokeManager</a>
-        <span class="breadcrumb-item active ms-2">Simular Errores</span>
-        <ul class="navbar-nav ms-auto">
-            <!-- Dropdown -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLinkRight" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span th:text="${#authentication.name}" style="font-size: 1.1rem; margin-right: 11px;"></span>
-                    <img src="/images/default_pfp.jpg" alt="Usuario" class="rounded-circle" style="width: 33px; height: 33px;">
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLinkRight">
-                    <li>
-                        <a class="dropdown-item" th:href="@{/user/edit}">Editar perfil</a>
-                    </li>
-                    <li th:if="${#authorization.expression('hasRole(''admin'')')}">
-                        <a class="dropdown-item" th:href="@{/user/management}">Gestionar usuarios</a>
-                    </li>
-                    <li>
-                        <form th:action="@{/logout}" method="post" style="margin: 0;">
-                            <button type="submit" class="dropdown-item">Cerrar Sesión</button>
-                        </form>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>
+<div th:replace="fragments :: navbar('Simular Errores')"></div>
 
 <div class="container vh-100 d-flex flex-column justify-content-center">
     <h1 class="text-center mb-4">Simular Errores</h1>

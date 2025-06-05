@@ -18,6 +18,12 @@
     object-fit: cover;
 }
 
+.dropdown-item i {
+        width: 20px;
+        text-align: center;
+        display: inline-block;
+    }
+
 .dropdown-menu li {
     position: relative;
 }
