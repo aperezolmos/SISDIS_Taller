@@ -84,7 +84,7 @@ public class PokemonController {
         // 2. Añadir a favoritos
         favoritePokemonService.addFavoritePokemon(user.getId(), pokemon.getId());
 
-        // Redirigir a la misma página de búsqueda (manteniendo los parámetros)
-        return "redirect:/search-pokemon?name=" + (name != null ? name : "") + "&limit=" + limit + "&offset=" + offset;
+        // Redirigir con mensaje de éxito a la misma página de búsqueda (manteniendo los parámetros)
+        return "redirect:/search-pokemon?name=" + (name != null ? name : "") + "&limit=" + limit + "&offset=" + offset + "&success=1";
     }
 }

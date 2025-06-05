@@ -46,23 +46,17 @@ def search_pokemon():
     limit = int(request.args.get('limit', 20))
     offset = int(request.args.get('offset', 0))
     try:
-        # Obtener todos los nombres de Pokémon
-        all_pokemons = PokeAPI.list_pokemon(limit=1000, offset=0)
+        all_pokemons = PokeAPI.list_pokemon(limit=1300, offset=0)
         # Filtrar por nombre si hay búsqueda
         if name_query:
             filtered = [p for p in all_pokemons if name_query in p['name'].lower()]
         else:
             filtered = all_pokemons
-        # Paginación manual
         paginated = filtered[offset:offset+limit]
-        # Añadir sprite a cada uno
-        for pokemon in paginated:
-            sprite_data = PokeAPI.get_pokemon_sprite(pokemon["name"])
-            pokemon["sprite"] = sprite_data["sprite"]
-
-            external_id_data = PokeAPI.get_pokemon_external_id(pokemon["name"])
-            pokemon["external_id"] = external_id_data["id"]
         
+        for pokemon in paginated:
+            types_data = PokeAPI.get_pokemon_types(pokemon["name"])
+            pokemon["types"] = ", ".join(types_data["types"])
         return jsonify({
             "results": paginated,
             "total": len(filtered)
@@ -76,8 +70,6 @@ def get_pokemon_daily(pokemon_id):
         # Info básica
         poke_data = PokeAPI.get_pokemon(pokemon_id)
         name = poke_data["name"]
-        #TODO: imagen oficial vs pixelart
-        #image = poke_data["sprites"]["other"]["official-artwork"]["front_default"] or poke_data["sprites"]["front_default"]
         image = poke_data["sprites"]["front_default"]
         external_id = poke_data["id"]
         # Flavor texts en español

@@ -36,9 +36,9 @@
                 </form>
             </div>
             <div class="text-center">
-                <img th:src="${dailyPokemon['image']}" alt="sprite" style="width:120px; margin:10px 0; display:block; margin-left:auto; margin-right:auto;"/>
+                <img th:src="${dailyPokemon['image']}" alt="sprite" style="width:120px; margin:5px 0; display:block; margin-left:auto; margin-right:auto;"/>
                 <div style="font-size:1.2em; font-weight:600; text-align:center;" th:text="${#strings.capitalize(dailyPokemon['name'])}"></div>
-                <div style="margin-top:10px;">
+                <div style="margin-top:10px; font-size:0.9em;">
                     <span th:text="${dailyPokemon['flavor_texts'][0]}" id="flavorText"></span>
                 </div>
                 <div class="flavor-arrows mt-2">

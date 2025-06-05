@@ -17,7 +17,19 @@ class PokeAPI:
         url = f"{PokeAPI.BASE_URL}/pokemon?limit={limit}&offset={offset}"
         response = requests.get(url)
         response.raise_for_status()
-        return response.json()["results"]  # Lista con nombres y URLs
+        results = response.json()["results"]
+        pokemons = []
+        for p in results:
+            # Extraer ID de la URL
+            url_parts = p["url"].rstrip('/').split('/')
+            poke_id = url_parts[-1]
+            sprite_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{poke_id}.png"
+            pokemons.append({
+                "name": p["name"],
+                "id": int(poke_id),
+                "sprite": sprite_url
+            })
+        return pokemons
         
     @staticmethod
     def get_pokemon_sprite(pokemon_name): # Imagen del Pokémon

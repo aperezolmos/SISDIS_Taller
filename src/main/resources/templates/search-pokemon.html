@@ -30,6 +30,9 @@
                             </button>
                         </div>
                     </form>
+                    <div th:if="${param.success}" class="alert alert-success text-center" role="alert">
+                        Pokémon agregado a favoritos correctamente.
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover table-striped align-middle">
                             <thead class="table-primary">
@@ -37,22 +40,24 @@
                                     <th>ID</th>
                                     <th>Imagen</th>
                                     <th>Nombre</th>
+                                    <th>Tipos</th>
                                     <th> </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="pokemon : ${pokemons}">
-                                    <td th:text="${pokemon['external_id']} ?: '-'"></td>
+                                    <td th:text="${pokemon['id']} ?: '-'"></td>
                                     <td>
                                         <img th:src="${pokemon['sprite']}" alt="sprite" width="70"/>
                                     </td>
                                     <td th:text="${pokemon['name']}"></td>
+                                    <td th:text="${pokemon['types']}"></td>
                                     <td>
                                         <form th:action="@{/add-favorite}" method="post" class="d-inline">
                                             <input type="hidden" name="userId" th:value="${userId}"/>
                                             <input type="hidden" name="pokemonName" th:value="${pokemon['name']}"/>
                                             <input type="hidden" name="imageUrl" th:value="${pokemon['sprite']}"/>
-                                            <input type="hidden" name="externalId" th:value="${pokemon['external_id']}"/>
+                                            <input type="hidden" name="externalId" th:value="${pokemon['id']}"/>
                                             <input type="hidden" name="name" th:value="${name}"/>
                                             <input type="hidden" name="limit" th:value="${limit}"/>
                                             <input type="hidden" name="offset" th:value="${offset}"/>
