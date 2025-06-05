@@ -40,31 +40,14 @@ def validate_user():
 
 # ------------------------------ POKEAPI ------------------------------
 
-@bp.route('/list-pokemon', methods=['GET'])
-def list_pokemon():
-    limit = int(request.args.get('limit', 20))
-    offset = int(request.args.get('offset', 0))
-    try:
-        pokemons = PokeAPI.list_pokemon(limit=limit, offset=offset)
-        # Añadir las imágenes de cada Pokémon
-        for pokemon in pokemons:
-            sprite_data = PokeAPI.get_pokemon_sprite(pokemon["name"])
-            pokemon["sprite"] = sprite_data["sprite"]
-        return jsonify(pokemons), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-
-
 @bp.route('/search-pokemon', methods=['GET'])
 def search_pokemon():
     name_query = request.args.get('name', '').lower()
     limit = int(request.args.get('limit', 20))
     offset = int(request.args.get('offset', 0))
     try:
-        # Obtener todos los nombres de Pokémon (la pokeapi tiene 1300+)
-        all_pokemons = PokeAPI.list_pokemon(limit=1300, offset=0)
+        # Obtener todos los nombres de Pokémon
+        all_pokemons = PokeAPI.list_pokemon(limit=1000, offset=0)
         # Filtrar por nombre si hay búsqueda
         if name_query:
             filtered = [p for p in all_pokemons if name_query in p['name'].lower()]
@@ -93,7 +76,9 @@ def get_pokemon_daily(pokemon_id):
         # Info básica
         poke_data = PokeAPI.get_pokemon(pokemon_id)
         name = poke_data["name"]
-        image = poke_data["sprites"]["other"]["official-artwork"]["front_default"] or poke_data["sprites"]["front_default"]
+        #TODO: imagen oficial vs pixelart
+        #image = poke_data["sprites"]["other"]["official-artwork"]["front_default"] or poke_data["sprites"]["front_default"]
+        image = poke_data["sprites"]["front_default"]
         external_id = poke_data["id"]
         # Flavor texts en español
         flavor_texts = PokeAPI.get_pokemon_flavor_texts(pokemon_id)

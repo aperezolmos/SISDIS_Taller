@@ -37,15 +37,6 @@ class PokeAPI:
         }
     
     @staticmethod
-    def get_pokemon_moves(pokemon_name):
-        data = PokeAPI.get_pokemon(pokemon_name)
-        moves = [m["move"]["name"] for m in data["moves"]]
-        return {
-            "name": data["name"],
-            "moves": moves
-        }
-    
-    @staticmethod
     def get_pokemon_external_id(pokemon_name):
         data = PokeAPI.get_pokemon(pokemon_name)
         return {

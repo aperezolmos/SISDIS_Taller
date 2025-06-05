@@ -55,7 +55,7 @@ public class ProxyController {
         return forwardToFlask("/api-rate-limit-error", model);
     }
 
-
+    // --------------------------------------------------------------------------------
     
     private String forwardToFlask(String endpoint, Model model) {
         String url = flaskApiUrl + endpoint;

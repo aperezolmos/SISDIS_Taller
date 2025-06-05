@@ -13,7 +13,6 @@ public class DailyPokemonService {
     @PostConstruct
     public void init() {
         Random random = new Random();
-        // Intenta con un rango razonable (1 a MAX_POKEMON_ID)
         dailyPokemonId = random.nextInt(MAX_POKEMON_ID) + 1;
     }
 
