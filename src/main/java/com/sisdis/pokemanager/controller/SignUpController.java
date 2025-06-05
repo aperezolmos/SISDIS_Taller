@@ -35,7 +35,7 @@ public class SignUpController {
         try {
             userService.registerUser(user);
         } catch (Exception e) {
-            model.addAttribute("registrationError", "El usuario ya existe"); // TODO
+            model.addAttribute("registrationError", "El usuario ya existe");
             return "signup";
         }
         // Redirige a login para que el usuario inicie sesión

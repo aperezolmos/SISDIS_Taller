@@ -48,8 +48,6 @@ public class UserService {
     }
 
     public UserDTO registerUser(User user) {
-        // TODO: Verifica si el usuario ya existe
-        
         // Encripta la contraseña antes de guardar
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // Por defecto, rol "standard" si no se especifica
