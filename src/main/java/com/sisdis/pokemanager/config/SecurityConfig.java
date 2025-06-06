@@ -23,7 +23,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Deshabilita CSRF para facilitar pruebas con Postman
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/home", "/signup", "/css/**", "/images/**").permitAll()
-                .requestMatchers( "/simulate/**").hasRole("admin")
+                .requestMatchers( "/simulate/**", "/user/management/**").hasRole("admin")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

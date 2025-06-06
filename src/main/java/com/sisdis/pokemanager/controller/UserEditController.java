@@ -4,12 +4,14 @@ import com.sisdis.pokemanager.model.User;
 import com.sisdis.pokemanager.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Controller
@@ -27,11 +29,16 @@ public class UserEditController {
                                Authentication authentication,
                                Model model) {
         String usernameToEdit = (usernameParam != null) ? usernameParam : authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_admin"));
+
+        // Si no es admin y quiere editar a otro usuario, denegar acceso
+        if (!isAdmin && usernameParam != null && !usernameParam.equals(authentication.getName())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para editar a otros usuarios.");
+        }
+
         User user = userService.findUserEntityByUsername(usernameToEdit);
         model.addAttribute("user", user);
         model.addAttribute("editingUsername", usernameToEdit);
-        // ¿El usuario autenticado es admin?
-        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_admin"));
         model.addAttribute("isAdmin", isAdmin);
         return "user-edit";
     }
@@ -45,6 +52,12 @@ public class UserEditController {
                             Authentication authentication,
                             Model model) {
         boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_admin"));
+        
+        // Si no es admin y quiere editar a otro usuario, denegar acceso
+        if (!isAdmin && !editingUsername.equals(authentication.getName())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permisos para editar a otros usuarios.");
+        }
+        
         User userToEdit = userService.findUserEntityByUsername(editingUsername);
 
         // Validar que el username no exista (excepto si no lo ha cambiado)

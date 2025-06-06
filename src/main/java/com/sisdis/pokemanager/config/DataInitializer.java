@@ -33,21 +33,22 @@ public class DataInitializer {
                 user.setPassword(passwordEncoder.encode(PASSWORD));
                 user.setRole(ROL);
                 user = userRepository.save(user);
-            }
 
-            // Añadir favoritos del usuario
-            int count = 0;
-            for (Pokemon pokemon : pokemonRepository.findAll()) {
-                if (count >= 13) break;
-                boolean exists = favoritePokemonRepository.existsByUserAndPokemon(user, pokemon);
-                if (!exists) {
-                    FavoritePokemon fav = new FavoritePokemon();
-                    fav.setUser(user);
-                    fav.setPokemon(pokemon);
-                    favoritePokemonRepository.save(fav);
+                // Añadir favoritos del usuario
+                int count = 0;
+                for (Pokemon pokemon : pokemonRepository.findAll()) {
+                    if (count >= 13) break; // Porque hemos definido 13 Pokémon en la BBDD inicial
+                    boolean exists = favoritePokemonRepository.existsByUserAndPokemon(user, pokemon);
+                    if (!exists) {
+                        FavoritePokemon fav = new FavoritePokemon();
+                        fav.setUser(user);
+                        fav.setPokemon(pokemon);
+                        favoritePokemonRepository.save(fav);
+                    }
+                    count++;
                 }
-                count++;
             }
+            
         };
     }
 }
